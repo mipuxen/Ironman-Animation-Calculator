@@ -1,0 +1,122 @@
+/* Stark Calculator — style.css | Made by Shuhratbek */
+/* ============ 1. RANGLAR (bir joyda o'zgartiriladi) ============ */
+:root {
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  --bg: #050b16;
+  --panel: rgba(18, 8, 10, 0.6);
+  --text: #e8f4ff;
+  --cyan: #9cd9f9;       /* HUD / arc reactor rangi */
+  --gold: #e0b957;
+  --red: #a5271d;
+  --red-dark: #4a130f;
+  --font-hud: "Orbitron", "Segoe UI", system-ui, sans-serif;   /* sarlavha va imzo shrifti */
+}
+html { height: 100%; scroll-padding-top: env(safe-area-inset-top, 0px); }
+* { box-sizing: border-box; }
+body {
+  margin: 0; height: 100%; overflow: hidden;
+  background: var(--bg); color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+/* ============ 2. FON (nuqtalar animatsiyasi) ============ */
+#bg {                       /* nuqtalar animatsiyasi shu canvasda */
+  position: fixed; inset: 0; width: 100%; height: 100%;
+  background: radial-gradient(circle at 50% 40%, #12305a, #050b16);
+}
+
+/* ============ 2-B. IRON MAN — calculator ICHIDA fon ============ */
+#hero {
+  position: absolute; left: 50%; top: 46%; z-index: 0;
+  width: 140%; transform: translate(-50%, -50%);   /* kattaligini "width" bilan o'zgartiring */
+  opacity: .6; pointer-events: none;
+  filter: drop-shadow(0 0 8px rgba(237, 28, 36, .55));
+}
+#hero .eyes { filter: drop-shadow(0 0 6px #bff3ff); }
+.calc > :not(#hero) { position: relative; z-index: 1; }   /* tugmalar va ekran Iron Man ustida */
+/* JS har bir shaklga .draw qo'yadi: avval kontur chiziladi, keyin ichi to'ladi */
+#hero .draw {
+  stroke-dasharray: 1; stroke-dashoffset: 1;       /* pathLength=1 bo'lgani uchun "1" = butun kontur */
+  animation: draw 3.5s linear forwards, fillIn 4s linear forwards;
+}
+@keyframes draw   { to   { stroke-dashoffset: 0; } }
+@keyframes fillIn { from { fill-opacity: 0; } }
+/* Arc reactor markazi: chizilib bo'lgach nafas olganday yonib-o'chadi */
+#hero .glow { opacity: 0; animation: pulse 2.4s ease-in-out 4s infinite; }
+@keyframes pulse { 0%, 100% { opacity: .35; } 50% { opacity: .95; } }
+
+/* ============ 3. CALCULATOR ============ */
+.wrap {
+  position: relative; z-index: 2; height: 100%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 14px; padding: 12px;
+}
+.calc {
+  position: relative; overflow: hidden;      /* Iron Man shu kartochka ichida turadi */
+  width: min(340px, 100%); padding: 16px; border-radius: 20px;
+  background: var(--panel);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--gold);
+  box-shadow: 0 0 28px rgba(165, 39, 29, 0.45), inset 0 0 18px rgba(224, 185, 87, 0.12);
+}
+.title {
+  display: flex; justify-content: space-between;
+  font-family: var(--font-hud); font-size: 11px; letter-spacing: .25em; color: var(--gold); margin-bottom: 8px;
+}
+.display {
+  min-height: 84px; padding: 10px 14px; border-radius: 12px; overflow: hidden;
+  display: flex; flex-direction: column; justify-content: flex-end; text-align: right;
+  background: rgba(0, 12, 24, 0.6); border: 1px solid rgba(156, 217, 249, 0.4);
+  font-family: ui-monospace, Consolas, monospace; color: var(--cyan);
+  text-shadow: 0 0 8px var(--cyan);
+}
+.expr { font-size: 13px; opacity: .6; min-height: 18px; word-break: break-all; }
+.result { font-size: 34px; word-break: break-all; }
+.result.error { color: #ff7a6b; text-shadow: 0 0 8px #ff3b2b; font-size: 16px; }
+
+.keys { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; }
+button {
+  padding: 14px 0; font-size: 20px; color: var(--text); cursor: pointer;
+  border-radius: 12px; border: 1px solid rgba(224, 185, 87, 0.35);
+  background: linear-gradient(rgba(123, 42, 32, .78), rgba(74, 19, 15, .78));
+  transition: transform .12s, box-shadow .12s;
+}
+button:hover { box-shadow: 0 0 12px rgba(224, 185, 87, 0.6); }
+button:active { transform: scale(.94); }
+button.op { background: linear-gradient(rgba(243, 217, 139, .9), rgba(169, 130, 44, .9)); color: #2a1a05; font-weight: 600; }
+button.fn { background: rgba(0, 0, 0, 0.45); color: #ff8f7d; }
+button.arc {                /* "=" tugmasi — arc reactor uslubida */
+  grid-column: 1 / -1; font-weight: 700; color: #06202e;
+  background: radial-gradient(circle, #fff 0%, #bff3ff 45%, #4cb8e8 100%);
+  box-shadow: 0 0 18px var(--cyan);
+}
+/* "Made by" imzosi — Orbitron shriftida */
+.credit {
+  font-family: var(--font-hud); font-size: 13px; font-weight: 700;
+  letter-spacing: .3em; text-transform: uppercase;
+  color: var(--cyan); text-shadow: 0 0 10px var(--cyan);
+}
+.credit b {
+  background: linear-gradient(#f6dc8f, #c9a24a); -webkit-background-clip: text; background-clip: text;
+  color: transparent; text-shadow: none;
+}
+
+/* ============ 4. ROBOT (natijani "aytadi") ============ */
+.talk { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+#robot { width: 52px; flex: none; filter: drop-shadow(0 0 6px rgba(156, 217, 249, .5)); }
+.antenna { animation: pulse 1.6s ease-in-out infinite; }
+#mouth { transform-box: fill-box; transform-origin: center; }
+.talking #mouth { animation: talk .18s ease-in-out infinite alternate; }   /* og'iz qimirlaydi */
+@keyframes talk { to { transform: scaleY(2.8); } }
+.bubble {
+  position: relative; flex: 1; padding: 8px 12px; border-radius: 12px;
+  font-size: 13px; line-height: 1.35; color: var(--cyan); word-break: break-word;
+  background: rgba(0, 12, 24, .72); border: 1px solid rgba(156, 217, 249, .4);
+}
+.bubble::before {                                   /* pufakchaning robotga qaragan uchi */
+  content: ""; position: absolute; left: -7px; top: 50%; width: 12px; height: 12px;
+  background: rgba(0, 12, 24, .95); transform: translateY(-50%) rotate(45deg);
+  border-left: 1px solid rgba(156, 217, 249, .4); border-bottom: 1px solid rgba(156, 217, 249, .4);
+}

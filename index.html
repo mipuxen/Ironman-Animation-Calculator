@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Stark Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<canvas id="bg"></canvas>
+
+
+<div class="wrap">
+  <div class="calc">
+    <!-- Iron Man fon rasmi (dubulg'a + ko'krak + arc reactor) — calculator ichida -->
+    <svg id="hero" viewBox="398.5 0 1108 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="suit" x1="0" y1="0" x2="0" y2="1">      <!-- metall qizil zirh -->
+          <stop offset="0" stop-color="#c0392b"/><stop offset=".55" stop-color="#7a1a14"/><stop offset="1" stop-color="#3a0d0a"/>
+        </linearGradient>
+        <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">      <!-- oltin yuz qismi -->
+          <stop offset="0" stop-color="#f6dc8f"/><stop offset=".5" stop-color="#c9a24a"/><stop offset="1" stop-color="#8f6a1f"/>
+        </linearGradient>
+        <radialGradient id="rg">
+          <stop offset="0" stop-color="#fff"/><stop offset=".45" stop-color="#bff3ff"/>
+          <stop offset="1" stop-color="#5ccdf0" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <g fill="url(#suit)" stroke="#ED1C24" stroke-width="5">
+        <!-- Ko'krak -->
+        <polygon points="648,666 650,658 656,645 662,633 670,626 696,617 709,617 737,630 738,636 742,641 751,647 759,648 770,648 778,651 920,732 929,764 938,762 948,761 956,761 965,762 974,765 985,731 1009,716 1029,704 1051,693 1069,683 1096,669 1118,657 1140,643 1152,643 1161,641 1166,635 1165,630 1195,617 1201,617 1206,617 1214,619 1226,624 1239,631 1242,635 1245,643 1253,657 1256,664 1256,667 1252,674 1243,691 1236,704 1232,711 1232,716 1234,721 1240,739 1243,747 1243,749 1245,750 1250,749 1264,744 1267,744 1268,746 1270,749 1272,752 1273,756 1273,764 1272,769 1270,774 1267,792 1093,959 1090,959 1030,921 1025,925 1023,927 1021,929 1016,933 1010,937 1009,938 1004,941 1001,943 998,944 995,946 991,947 987,948 984,949 978,951 975,952 969,953 963,954 955,954 949,954 945,954 938,954 933,953 926,952 918,950 908,946 896,940 891,936 884,930 878,924 877,924 812,959 810,959 802,950 638,793 630,758 630,756 630,754 631,751 633,748 634,745 636,745 638,744 639,745 641,745 655,751 657,750 659,749 662,746 664,739 668,724 669,720 671,715 671,712 670,707 669,703"/>
+
+        <!-- Arc reactor -->
+        <g fill="none" stroke="#5C9DAD">
+          <circle cx="951" cy="849" r="145"/>
+          <circle cx="952" cy="847" r="107"/>
+          <circle cx="952" cy="850" r="96"/>
+          <circle cx="953" cy="853" r="77.5"/>
+          <circle cx="953" cy="853" r="56.5"/>
+          <circle cx="953" cy="852" r="29" />
+          <g stroke-width="3">
+            <circle cx="953" cy="810" r="5"/><circle cx="995" cy="851" r="5"/>
+            <circle cx="953" cy="896" r="5"/><circle cx="910" cy="852" r="5"/>
+            <circle cx="981" cy="819" r="5"/><circle cx="922" cy="880" r="5"/>
+            <circle cx="922" cy="821" r="5"/><circle cx="985" cy="881" r="5"/>
+          </g>
+          <g id="ticks" stroke="#5B9DAC" stroke-width="9"></g>   <!-- JS to'ldiradi -->
+          <circle class="glow" cx="953" cy="852" r="60" fill="url(#rg)" stroke="none"/>
+        </g>
+
+        <!-- Dubulg'a -->
+        <polygon points="852,455 838,405 836,394 830,349 826,321 825,297 825,272 827,226 834,176 831,285 836,176 860,113 889,102 908,97 933,93 953,91 967,91 986,94 1001,97 1019,102 1055,121 1070,137 1073,270 1071,160 1078,220 1080,264 1080,298 1078,338 1075,369 1070,396 1055,453 1007,495 898,495"/>
+
+        <!-- Yuz qoplamasi (oltin) -->
+        <g fill="url(#gold)" stroke="#E2CDBC" stroke-width="3">
+          <polygon points="837,136 836,145 834,164 834,169 834,179 834,191 834,205 834,217 834,225 835,237 838,246 838,249 836,252 834,254 832,256 832,273 848,279 849,266 852,267 859,268 874,272 893,276 919,279 983,279 1005,278 1023,275 1030,273 1037,272 1057,266 1057,281 1073,272 1073,258 1070,253 1069,251 1068,248 1068,244 1069,239 1071,224 1071,202 1071,179 1070,137 1066,131 1055,121 1044,113 1041,114 1039,114 1035,111 1034,107 1027,104 1019,102 1013,101 1005,101 999,101 998,103 996,105 995,111 992,123 991,130 990,139 990,154 989,160 982,177 923,176 917,161 917,149 916,143 915,135 912,115 908,102 905,101 897,101 893,101 889,102 882,103 870,109 869,111 869,112 868,113 865,113 861,112 856,116 848,124"/>
+          <polyline points="832,273 829,313 843,343 855,362 859,367 872,389 874,394 876,401 877,408 879,414 894,429 897,431 899,430 909,413 997,413 1006,429 1008,430 1009,431 1011,430 1026,413 1026,408 1027,403 1028,399 1030,394 1034,386 1040,375 1048,364 1059,348 1065,338 1068,330 1073,314 1073,272 1058,283 1056,284 1052,287 1047,289 1041,291 1029,291 989,290 985,279 921,279 917,291 865,292 859,289 855,287 851,284 846,279 832,273"/>
+          <polygon points="870,451 876,424 877,423 878,421 880,421 882,422 896,439 897,440 898,439 912,421 994,421 1007,438 1008,439 1010,439 1012,438 1013,436 1024,422 1026,421 1028,421 1029,423 1035,449 1035,451 1035,453 1016,471 1014,471 1012,471 1011,470 993,454 992,453 990,453 970,452 969,451 967,447 966,446 963,446 940,446 939,446 937,449 936,451 936,452 935,453 914,453 913,454 910,456 895,470 894,471 892,472 891,472 888,470"/>
+        </g>
+
+        <!-- Ko'zlar -->
+        <g class="eyes" fill="#fff" stroke="#B2BCB2" stroke-width="3">
+          <polyline points="857,268 854,279 866,286 874,287 884,287 893,287 904,287 910,285 914,284 916,278 857,268"/>
+          <polyline points="1050,268 1053,277 1052,279 1036,286 995,285 992,283 991,281 990,278 1050,268"/>
+        </g>
+      </g>
+    </svg>
+    <div class="title"><span>STARK INDUSTRIES</span><span>J.A.R.V.I.S.</span></div>
+    <!-- Robot: natijani "aytadi" -->
+    <div class="talk" id="talk">
+      <svg id="robot" viewBox="0 0 64 74" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs><linearGradient id="metal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6ebf2"/><stop offset="1" stop-color="#7d8794"/></linearGradient></defs>
+        <line x1="32" y1="14" x2="32" y2="5" stroke="#e0b957" stroke-width="3"/>
+        <circle class="antenna" cx="32" cy="4" r="4" fill="#ff5a4a"/>
+        <rect x="2" y="27" width="7" height="14" rx="3" fill="#e0b957"/>
+        <rect x="55" y="27" width="7" height="14" rx="3" fill="#e0b957"/>
+        <rect x="8" y="14" width="48" height="38" rx="11" fill="url(#metal)" stroke="#e0b957" stroke-width="2"/>
+        <rect x="14" y="21" width="36" height="20" rx="7" fill="#06202e"/>
+        <circle cx="24" cy="31" r="5" fill="#9cd9f9"/><circle cx="40" cy="31" r="5" fill="#9cd9f9"/>
+        <rect id="mouth" x="24" y="45" width="16" height="3" rx="1.5" fill="#06202e"/>
+        <rect x="18" y="55" width="28" height="16" rx="6" fill="url(#metal)" stroke="#e0b957" stroke-width="2"/>
+        <circle cx="32" cy="63" r="4" fill="#bff3ff"/>
+      </svg>
+      <div class="bubble" id="bubble">Hello! I'm J.A.R.V.I.S. Shall we calculate?</div>
+    </div>
+    <div class="display">
+      <div class="expr" id="expr"></div>
+      <div class="result" id="result">0</div>
+    </div>
+    <div class="keys" id="keys"></div>
+  </div>
+  <div class="credit">Made by <b>Shuhratbek</b></div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
